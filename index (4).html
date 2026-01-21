@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Smart Calculator</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  background:#f2f2f2;
+  font-family:Arial, sans-serif;
+}
+
+.calculator{
+  width:340px;
+  background:#fff;
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+.display{
+  width:100%;
+  min-height:70px;
+  font-size:32px;
+  text-align:right;
+  padding:10px;
+  border:none;
+  outline:none;
+  background:#eee;
+  border-radius:15px;
+  word-wrap:break-word;
+  overflow-x:auto;
+}
+
+.buttons{
+  margin-top:15px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+button{
+  height:60px;
+  font-size:22px;
+  border:none;
+  border-radius:50%;
+  cursor:pointer;
+}
+
+.number{ background:#e0e0e0; }
+.operator{ background:#ff9500; color:#fff; }
+.clear{ background:#ff3b30; color:#fff; }
+.equal{
+  background:#34c759;
+  color:#fff;
+  grid-column: span 2;
+  border-radius:30px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="calculator">
+  <div id="display" class="display"></div>
+
+  <div class="buttons">
+    <button class="clear" onclick="clearAll()">AC</button>
+    <button onclick="backspace()">⌫</button>
+    <button onclick="add('%')">%</button>
+    <button class="operator" onclick="addOperator('÷')">÷</button>
+
+    <button class="number" onclick="add('7')">7</button>
+    <button class="number" onclick="add('8')">8</button>
+    <button class="number" onclick="add('9')">9</button>
+    <button class="operator" onclick="addOperator('×')">×</button>
+
+    <button class="number" onclick="add('4')">4</button>
+    <button class="number" onclick="add('5')">5</button>
+    <button class="number" onclick="add('6')">6</button>
+    <button class="operator" onclick="addOperator('-')">−</button>
+
+    <button class="number" onclick="add('1')">1</button>
+    <button class="number" onclick="add('2')">2</button>
+    <button class="number" onclick="add('3')">3</button>
+    <button class="operator" onclick="addOperator('+')">+</button>
+
+    <button class="number" onclick="add('0')">0</button>
+    <button class="number" onclick="add('.')">.</button>
+    <button class="equal" onclick="calculate()">=</button>
+  </div>
+</div>
+
+<script>
+let expression = "";
+
+function add(value){
+  expression += value;
+  updateDisplay();
+}
+
+function addOperator(op){
+  expression += op;
+  updateDisplay();
+}
+
+function updateDisplay(){
+  document.getElementById("display").innerText = expression;
+}
+
+function clearAll(){
+  expression = "";
+  updateDisplay();
+}
+
+function backspace(){
+  expression = expression.slice(0,-1);
+  updateDisplay();
+}
+
+function calculate(){
+  try{
+    let calc = expression
+      .replace(/×/g,'*')
+      .replace(/÷/g,'/');
+    let result = eval(calc);
+    expression = result.toString();
+    updateDisplay();
+  }catch{
+    expression = "Error";
+    updateDisplay();
+  }
+}
+</script>
+
+</body>
+</html>
