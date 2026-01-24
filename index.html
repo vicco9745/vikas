@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Calculator</title>
 
+<!-- ✅ APP MANIFEST LINK -->
+<link rel="manifest" href="app.json">
+
+<!-- ✅ APP ICON -->
+<link rel="icon" href="icon.png">
+
 <style>
 body {
     margin: 0;
@@ -84,12 +90,11 @@ button:active {
 <div class="calculator">
 
     <div class="top-bar">
-        <span>?</span>
+        <span>Calculator</span>
         <span onclick="toggleHistory()">🕘</span>
     </div>
 
     <div id="display" class="display">0</div>
-
     <div id="history" class="history"></div>
 
     <div class="buttons">
@@ -126,13 +131,7 @@ let historyBox = document.getElementById("history");
 
 function press(val) {
     if (display.innerText === "0") display.innerText = "";
-
-    // ✅ ONLY FIX FOR GUNA
-    if (val === "*") {
-        display.innerText += "×";
-    } else {
-        display.innerText += val;
-    }
+    display.innerText += (val === "*") ? "×" : val;
 }
 
 function clearAll() {
@@ -163,6 +162,27 @@ function addHistory(text) {
 function toggleHistory() {
     historyBox.style.display =
         historyBox.style.display === "block" ? "none" : "block";
+}
+
+/* ✅ OFFLINE SUPPORT (NO EXTRA FILE) */
+if ("serviceWorker" in navigator) {
+    const swCode = `
+        self.addEventListener('install', e => {
+            e.waitUntil(
+                caches.open('calculator-cache').then(cache => {
+                    return cache.addAll(['./']);
+                })
+            );
+        });
+        self.addEventListener('fetch', e => {
+            e.respondWith(
+                caches.match(e.request).then(res => res || fetch(e.request))
+            );
+        });
+    `;
+    const blob = new Blob([swCode], { type: "text/javascript" });
+    const swURL = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(swURL);
 }
 </script>
 
