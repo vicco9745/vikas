@@ -1,15 +1,18 @@
-self.addEventListener("install", function(e) {
+self.addEventListener("install", e => {
   e.waitUntil(
-    caches.open("calculator-cache").then(function(cache) {
-      return cache.addAll(["./"]);
+    caches.open("calculator-cache").then(cache => {
+      return cache.addAll([
+        "./",
+        "./index.html",
+        "./manifest.json",
+        "./icon.png"
+      ]);
     })
   );
 });
 
-self.addEventListener("fetch", function(e) {
+self.addEventListener("fetch", e => {
   e.respondWith(
-    caches.match(e.request).then(function(res) {
-      return res || fetch(e.request);
-    })
+    caches.match(e.request).then(res => res || fetch(e.request))
   );
 });
