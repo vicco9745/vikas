@@ -1,10 +1,10 @@
 {
   "name": "Calculator App",
   "short_name": "Calculator",
-  "start_url": ".",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#ff9800",
+  "theme_color": "#ffffff",
   "icons": [
     {
       "src": "icon.png",
