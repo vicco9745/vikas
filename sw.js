@@ -1,18 +1,13 @@
+const CACHE = "calculator-v1";
+
 self.addEventListener("install", e => {
   e.waitUntil(
-    caches.open("calculator-cache").then(cache => {
-      return cache.addAll([
-        "./",
-        "./index.html",
-        "./manifest.json",
-        "./icon.png"
-      ]);
-    })
+    caches.open(CACHE).then(c => c.addAll(["./"]))
   );
 });
 
 self.addEventListener("fetch", e => {
   e.respondWith(
-    caches.match(e.request).then(res => res || fetch(e.request))
+    caches.match(e.request).then(r => r || fetch(e.request))
   );
 });
