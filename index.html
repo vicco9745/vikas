@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -165,7 +166,7 @@ function add(v){
 
 function calculate(){
   try{
-    let r=eval(exp);
+    let r = eval(exp.replace(/×/g,"*"));
     document.getElementById("res").innerText=r;
     historyArr.unshift(exp+" = "+r);
     renderHistory();
@@ -218,7 +219,6 @@ function clearHistory(){
   renderHistory();
 }
 
-/* PWA Service Worker */
 if("serviceWorker" in navigator){
   navigator.serviceWorker.register("sw.js");
 }
