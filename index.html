@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -159,9 +158,26 @@ body{
 let exp="";
 let historyArr=[];
 
+/* 🔥 AUTO CALCULATION */
+function calculateAuto(){
+  try{
+    if(!exp){
+      document.getElementById("res").innerText="0";
+      return;
+    }
+    let r = eval(exp.replace(/×/g,"*"));
+    if(isFinite(r)){
+      document.getElementById("res").innerText=r;
+    }
+  }catch{
+    // silent
+  }
+}
+
 function add(v){
   exp+=v;
   document.getElementById("exp").innerText=exp;
+  calculateAuto(); // 🔥 magic
 }
 
 function calculate(){
@@ -184,12 +200,14 @@ function clearAll(){
 function back(){
   exp=exp.slice(0,-1);
   document.getElementById("exp").innerText=exp;
+  calculateAuto();
 }
 
 function toggleSign(){
   if(exp){
     exp="(-1*("+exp+"))";
     document.getElementById("exp").innerText=exp;
+    calculateAuto();
   }
 }
 
@@ -202,6 +220,7 @@ function func(f){
   if(f==="log") exp="Math.log10("+exp+")";
   if(f==="inv") exp="1/("+exp+")";
   document.getElementById("exp").innerText=exp;
+  calculateAuto();
 }
 
 function toggleHistory(){
