@@ -5,7 +5,6 @@
 <title>Scientific Calculator</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<!-- PWA -->
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#1976d2">
 
@@ -157,8 +156,12 @@ body{
 <script>
 let exp="";
 let historyArr=[];
+let lastCalculated=false;
 
-/* 🔥 AUTO CALCULATION */
+function isOperator(v){
+  return ['+','-','×','/'].includes(v);
+}
+
 function calculateAuto(){
   try{
     if(!exp){
@@ -169,23 +172,43 @@ function calculateAuto(){
     if(isFinite(r)){
       document.getElementById("res").innerText=r;
     }
-  }catch{
-    // silent
-  }
+  }catch{}
 }
 
 function add(v){
-  exp+=v;
-  document.getElementById("exp").innerText=exp;
-  calculateAuto(); // 🔥 magic
+  let res = document.getElementById("res").innerText;
+
+  // ✅ RESULT को ऊपर ले आओ जब operator दबे
+  if(lastCalculated && isOperator(v)){
+    exp = res;
+    lastCalculated = false;
+  }
+
+  // नया नंबर दबाया तो fresh start
+  if(lastCalculated && !isOperator(v)){
+    exp = "";
+    document.getElementById("res").innerText="0";
+    lastCalculated=false;
+  }
+
+  exp += v;
+  document.getElementById("exp").innerText = exp;
+  calculateAuto();
 }
 
 function calculate(){
   try{
     let r = eval(exp.replace(/×/g,"*"));
     document.getElementById("res").innerText=r;
+
+    // ✅ RESULT ऊपर भी दिखे
+    document.getElementById("exp").innerText=r;
+
     historyArr.unshift(exp+" = "+r);
     renderHistory();
+
+    exp = String(r);
+    lastCalculated=true;
   }catch{
     document.getElementById("res").innerText="Error";
   }
@@ -193,6 +216,7 @@ function calculate(){
 
 function clearAll(){
   exp="";
+  lastCalculated=false;
   document.getElementById("exp").innerText="";
   document.getElementById("res").innerText="0";
 }
